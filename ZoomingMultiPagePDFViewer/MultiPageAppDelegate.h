@@ -10,12 +10,11 @@
 
 @class PageViewController;
 
-@interface MultiPageAppDelegate : NSObject <UIApplicationDelegate> {
-
+@interface MultiPageAppDelegate : NSObject <UIApplicationDelegate> 
+{
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
-
 @property (nonatomic, retain) IBOutlet PageViewController *viewController;
 
 @end

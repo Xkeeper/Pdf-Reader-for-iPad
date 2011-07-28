@@ -48,11 +48,13 @@
     CGRect visibleBounds = [scrollView bounds];
     
     int firstNeededPageIndex = (floorf(CGRectGetMinY(visibleBounds) / CGRectGetHeight(visibleBounds))) - 1;
-    int lastNeededPageIndex = firstNeededPageIndex + 2;
-    
     firstNeededPageIndex = MAX(firstNeededPageIndex, 1);
+    
+    int lastNeededPageIndex = firstNeededPageIndex + 3;
     lastNeededPageIndex = MIN(lastNeededPageIndex, self.pageCount);
 
+    NSLog(@"first -- %d and last %d", firstNeededPageIndex, lastNeededPageIndex);
+    
     for (PDFScrollView *pageView in visiblePages) 
     {
         if(pageView.pageIndex < firstNeededPageIndex || pageView.pageIndex > lastNeededPageIndex)
@@ -71,9 +73,12 @@
     {
         if(![self isDisplayingPageForIndex:index])
         {
-            PDFScrollView *page = [[PDFScrollView alloc] initWithFrame:CGRectMake(0, 748 * (index - 1), 1024, 748) 
+            PDFScrollView *page = [[[PDFScrollView alloc] initWithFrame:CGRectMake(0, 
+                                                                                  1004 * (index - 1), 
+                                                                                  768, 
+                                                                                  1004) 
                                                            andFileName:@"alice.pdf" 
-                                                              withPage:index];
+                                                              withPage:index] autorelease];
             [scrollView addSubview:page];
             [visiblePages addObject:page];
         }
@@ -98,6 +103,7 @@
     {
         if (page.pageIndex == index) 
         {
+            NSLog(@"displaying page ... %d", index);
             return YES;
         }
     }
@@ -120,17 +126,18 @@
     recycledPages = [[NSMutableSet alloc] init];
     
     scrollView = [[UIScrollView alloc] init];
-    scrollView.frame = CGRectMake(0, 0, 1024, 768);
+    scrollView.frame = CGRectMake(0, 0, 768, 1004);
     scrollView.pagingEnabled = YES;
     scrollView.scrollEnabled = YES;
     scrollView.delegate = self;
-    scrollView.contentSize = CGSizeMake(1024, 768 * pageCount);
+    scrollView.backgroundColor = [UIColor lightGrayColor];
+    scrollView.contentSize = CGSizeMake(768, 1004 * pageCount);
     [self.view addSubview:scrollView];
     
-    PDFScrollView *pageA = [[PDFScrollView alloc] initWithFrame:CGRectMake(0, 0, 1024, 748) 
+    PDFScrollView *pageA = [[PDFScrollView alloc] initWithFrame:CGRectMake(0, 0, 768, 1004) 
                                                            andFileName:@"alice.pdf" withPage:1];
     
-    PDFScrollView *pageB = [[PDFScrollView alloc] initWithFrame:CGRectMake(0, 748 * 1, 1024, 748) 
+    PDFScrollView *pageB = [[PDFScrollView alloc] initWithFrame:CGRectMake(0, 1004 * 1, 768, 1004) 
                                                    andFileName:@"alice.pdf" withPage:2];
     
     [scrollView addSubview:pageA];
