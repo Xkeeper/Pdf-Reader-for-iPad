@@ -18,11 +18,15 @@
     NSMutableSet *visiblePages;
     
     int pageCount;
+    UILabel *labelCurrentPage;
+    NSInteger currentPageIndex;
 }
 
 @property (nonatomic, assign) int pageCount;
 @property (nonatomic, retain) UIScrollView *scrollView;
 @property (nonatomic, retain) NSMutableSet *recycledPages;
 @property (nonatomic, retain) NSMutableSet *visiblePages;
+@property (nonatomic, retain) UILabel *labelCurrentPage;
+@property (nonatomic, assign) NSInteger currentPageIndex;
 
 @end

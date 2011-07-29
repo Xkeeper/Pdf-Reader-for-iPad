@@ -8,11 +8,14 @@
 
 #import "PageViewController.h"
 #import "PDFScrollView.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface PageViewController (Private)
     - (void)tilePages;
     - (BOOL)isDisplayingPageForIndex:(NSInteger)index;
     - (PDFScrollView *)dequeueRecycledPage;
+    - (void)addCurrentPageLabel;
+    - (void)updateCurrentPageLabel;
 @end
 
 @implementation PageViewController
@@ -21,11 +24,13 @@
 @synthesize visiblePages;
 @synthesize scrollView;
 @synthesize pageCount;
+@synthesize labelCurrentPage;
+@synthesize currentPageIndex;
 
 - (void)dealloc
 {
     [scrollView release];
-    
+    [labelCurrentPage release];
     [recycledPages release];
     [visiblePages release];
     
@@ -47,8 +52,11 @@
 {
     CGRect visibleBounds = [scrollView bounds];
     
-    int firstNeededPageIndex = (floorf(CGRectGetMinY(visibleBounds) / CGRectGetHeight(visibleBounds))) - 1;
-    firstNeededPageIndex = MAX(firstNeededPageIndex, 1);
+    int currentPage = (floorf(CGRectGetMinY(visibleBounds) / CGRectGetHeight(visibleBounds)));
+    self.currentPageIndex = currentPage+1;
+    [self updateCurrentPageLabel];
+    
+    int firstNeededPageIndex = MAX(currentPage--, 1);
     
     int lastNeededPageIndex = firstNeededPageIndex + 3;
     lastNeededPageIndex = MIN(lastNeededPageIndex, self.pageCount);
@@ -134,8 +142,8 @@
     scrollView.contentSize = CGSizeMake(768, 1004 * pageCount);
     [self.view addSubview:scrollView];
     
-    PDFScrollView *pageA = [[PDFScrollView alloc] initWithFrame:CGRectMake(0, 0, 768, 1004) 
-                                                           andFileName:@"alice.pdf" withPage:1];
+    PDFScrollView *pageA = [[PDFScrollView alloc] initWithFrame:CGRectMake(0, 0, 768, 1004)       
+                                                    andFileName:@"alice.pdf" withPage:1];
     
     PDFScrollView *pageB = [[PDFScrollView alloc] initWithFrame:CGRectMake(0, 1004 * 1, 768, 1004) 
                                                    andFileName:@"alice.pdf" withPage:2];
@@ -145,8 +153,25 @@
     [scrollView addSubview:pageB];
     [visiblePages addObject:pageB];
     
-    //[self tilePages];
+    [self addCurrentPageLabel];
+    self.currentPageIndex = 1;
+    [self updateCurrentPageLabel];
 }
+
+- (void)addCurrentPageLabel
+{
+    labelCurrentPage = [[UILabel alloc] init];
+    self.labelCurrentPage.frame = CGRectMake(0, 0, 100, 70);
+    self.labelCurrentPage.backgroundColor = [UIColor clearColor];
+    self.labelCurrentPage.textAlignment = UITextAlignmentCenter;
+    [self.view addSubview:labelCurrentPage];
+}
+
+- (void)updateCurrentPageLabel
+{
+    [self.labelCurrentPage setText:[NSString  stringWithFormat:@"%d", self.currentPageIndex]];    
+}
+
 - (void)viewDidUnload
 {
     [super viewDidUnload];
