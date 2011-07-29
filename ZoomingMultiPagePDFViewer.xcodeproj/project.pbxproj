@@ -20,6 +20,7 @@
 		703269CC13D2BF420048E55E /* PDFScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 703269C913D2BF420048E55E /* PDFScrollView.m */; };
 		703269DD13D2C7C90048E55E /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 703269DB13D2C7600048E55E /* QuartzCore.framework */; };
 		703269DF13D2C9CC0048E55E /* alice.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 703269DE13D2C9CC0048E55E /* alice.pdf */; };
+		70ADE8A013E2A392001B5BD3 /* IndexViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 70ADE89F13E2A392001B5BD3 /* IndexViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,8 @@
 		703269C913D2BF420048E55E /* PDFScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDFScrollView.m; sourceTree = "<group>"; };
 		703269DB13D2C7600048E55E /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		703269DE13D2C9CC0048E55E /* alice.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = alice.pdf; sourceTree = "<group>"; };
+		70ADE89E13E2A392001B5BD3 /* IndexViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IndexViewController.h; sourceTree = "<group>"; };
+		70ADE89F13E2A392001B5BD3 /* IndexViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IndexViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +100,7 @@
 				703269B813D2BB1A0048E55E /* PageViewController.h */,
 				703269B913D2BB1A0048E55E /* PageViewController.m */,
 				703269BB13D2BB1A0048E55E /* PageViewController.xib */,
+				70ADE89C13E2A374001B5BD3 /* index_popup */,
 				703269C313D2BD7C0048E55E /* base */,
 				703269AA13D2BB1A0048E55E /* Supporting Files */,
 			);
@@ -124,6 +128,15 @@
 				703269C913D2BF420048E55E /* PDFScrollView.m */,
 			);
 			name = base;
+			sourceTree = "<group>";
+		};
+		70ADE89C13E2A374001B5BD3 /* index_popup */ = {
+			isa = PBXGroup;
+			children = (
+				70ADE89E13E2A392001B5BD3 /* IndexViewController.h */,
+				70ADE89F13E2A392001B5BD3 /* IndexViewController.m */,
+			);
+			name = index_popup;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -192,6 +205,7 @@
 				703269BA13D2BB1A0048E55E /* PageViewController.m in Sources */,
 				703269CB13D2BF420048E55E /* TiledPDFView.m in Sources */,
 				703269CC13D2BF420048E55E /* PDFScrollView.m in Sources */,
+				70ADE8A013E2A392001B5BD3 /* IndexViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
