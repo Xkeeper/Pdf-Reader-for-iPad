@@ -8,6 +8,7 @@
 
 #import "PageViewController.h"
 #import "PDFScrollView.h"
+#import "IndexViewController.h"
 #import <QuartzCore/QuartzCore.h>
 
 @interface PageViewController (Private)
@@ -16,6 +17,8 @@
     - (PDFScrollView *)dequeueRecycledPage;
     - (void)addCurrentPageLabel;
     - (void)updateCurrentPageLabel;
+    - (void)addScrollView;
+    - (void)addIndexPopUpButton;
 @end
 
 @implementation PageViewController
@@ -60,8 +63,6 @@
     
     int lastNeededPageIndex = firstNeededPageIndex + 3;
     lastNeededPageIndex = MIN(lastNeededPageIndex, self.pageCount);
-
-    NSLog(@"first -- %d and last %d", firstNeededPageIndex, lastNeededPageIndex);
     
     for (PDFScrollView *pageView in visiblePages) 
     {
@@ -111,7 +112,6 @@
     {
         if (page.pageIndex == index) 
         {
-            NSLog(@"displaying page ... %d", index);
             return YES;
         }
     }
@@ -133,14 +133,10 @@
     visiblePages = [[NSMutableSet alloc] init];
     recycledPages = [[NSMutableSet alloc] init];
     
-    scrollView = [[UIScrollView alloc] init];
-    scrollView.frame = CGRectMake(0, 0, 768, 1004);
-    scrollView.pagingEnabled = YES;
-    scrollView.scrollEnabled = YES;
-    scrollView.delegate = self;
-    scrollView.backgroundColor = [UIColor lightGrayColor];
-    scrollView.contentSize = CGSizeMake(768, 1004 * pageCount);
-    [self.view addSubview:scrollView];
+    // Add scroll view
+    [self addScrollView];
+    // Add index popup button
+    [self addIndexPopUpButton];
     
     PDFScrollView *pageA = [[PDFScrollView alloc] initWithFrame:CGRectMake(0, 0, 768, 1004)       
                                                     andFileName:@"alice.pdf" withPage:1];
@@ -158,6 +154,28 @@
     [self updateCurrentPageLabel];
 }
 
+#pragma mark -
+- (void)addScrollView
+{
+    scrollView = [[UIScrollView alloc] init];
+    scrollView.frame = CGRectMake(0, 0, 768, 1004);
+    scrollView.pagingEnabled = YES;
+    scrollView.scrollEnabled = YES;
+    scrollView.delegate = self;
+    scrollView.backgroundColor = [UIColor lightGrayColor];
+    scrollView.contentSize = CGSizeMake(768, 1004 * pageCount);
+    [self.view addSubview:scrollView];
+}
+
+- (void)addIndexPopUpButton
+{
+    UIButton *buttonPopup = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    buttonPopup.frame = CGRectMake(20, 50, 60, 60);
+    [buttonPopup setTitle:@"Pages" forState:UIControlStateNormal];
+    [buttonPopup addTarget:self action:@selector(showIndexPopup:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:buttonPopup];
+}
+
 - (void)addCurrentPageLabel
 {
     labelCurrentPage = [[UILabel alloc] init];
@@ -170,6 +188,13 @@
 - (void)updateCurrentPageLabel
 {
     [self.labelCurrentPage setText:[NSString  stringWithFormat:@"%d", self.currentPageIndex]];    
+}
+
+#pragma mark -
+- (void)showIndexPopup:(id)sender
+{
+    IndexViewController *indexViewController = [[[IndexViewController alloc] init] autorelease];
+    [self.view addSubview:indexViewController.view];
 }
 
 - (void)viewDidUnload
