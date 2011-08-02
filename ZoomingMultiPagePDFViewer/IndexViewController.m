@@ -7,10 +7,12 @@
 //
 
 #import "IndexViewController.h"
+#import "PDFScrollView.h"
+
+@interface IndexViewController (Private)
+@end
 
 @implementation IndexViewController
-
-@synthesize scrollView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -32,31 +34,52 @@
 }
 
 #pragma mark - View lifecycle
-/*
-// Implement loadView to create a view hierarchy programmatically, without using a nib.
-- (void)loadView
-{
-}
-*/
-
-
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    self.view.frame = CGRectMake(0, 804, 768, 200);
+    self.view.frame = CGRectMake(0, 804, 768, 192);
+    self.scrollView.frame = self.view.bounds;
     self.view.backgroundColor = [UIColor lightGrayColor];
-    
-    scrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
-    [self.view addSubview:self.scrollView];
+        
+    [self tilePages];
+}
+
+- (CGRect)rectForPage:(NSInteger)pageIndex
+{
+    return CGRectMake(192 * (pageIndex - 1), 
+                      0, 
+                      192, 
+                      256);
+}
+
+- (CGRect)rectForView
+{
+    return CGRectMake(0, 
+                      804, 
+                      768, 
+                      192);
+}
+
+- (CGSize)contentSizeForScrollView
+{
+    return CGSizeMake(768 * pageCount/4, 192);
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
+}
+
+- (void)calculateFirstLastNeededPageIndex
+{
+    CGRect visibleBounds = scrollView.bounds;//[self rectForView];
+    int currentPage = (floorf(CGRectGetMinX(visibleBounds) / CGRectGetWidth(visibleBounds)));
+    self.currentPageIndex = currentPage + 1;
+    self.firstNeededPageIndex = MAX(currentPage - 4, 1);
+    
+    self.lastNeededPageIndex = firstNeededPageIndex + 10;
+    self.lastNeededPageIndex = MIN(lastNeededPageIndex, self.pageCount);    
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

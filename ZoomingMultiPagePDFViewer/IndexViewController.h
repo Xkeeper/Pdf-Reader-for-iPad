@@ -7,12 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PagingUIViewController.h"
 
-@interface IndexViewController : UIViewController 
+@interface IndexViewController : PagingUIViewController 
 {
-    UIScrollView *scrollView;
 }
-
-@property (nonatomic, retain) UIScrollView *scrollView;
 
 @end

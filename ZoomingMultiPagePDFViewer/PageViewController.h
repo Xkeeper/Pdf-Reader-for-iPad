@@ -7,26 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PagingUIViewController.h"
 
 @class PDFScrollView;
+@class IndexViewController;
 
-@interface PageViewController : UIViewController <UIScrollViewDelegate>
+@interface PageViewController : PagingUIViewController 
 {
-    UIScrollView *scrollView;
-    
-    NSMutableSet *recycledPages;
-    NSMutableSet *visiblePages;
-    
-    int pageCount;
     UILabel *labelCurrentPage;
-    NSInteger currentPageIndex;
+    IndexViewController *indexViewController; 
 }
 
-@property (nonatomic, assign) int pageCount;
-@property (nonatomic, retain) UIScrollView *scrollView;
-@property (nonatomic, retain) NSMutableSet *recycledPages;
-@property (nonatomic, retain) NSMutableSet *visiblePages;
 @property (nonatomic, retain) UILabel *labelCurrentPage;
-@property (nonatomic, assign) NSInteger currentPageIndex;
+
+- (void)showHideIndexPopup:(id)sender;
 
 @end
