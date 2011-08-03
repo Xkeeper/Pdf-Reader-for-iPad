@@ -82,8 +82,6 @@
     NSURL *pdfURL = [[NSBundle mainBundle] URLForResource:@"alice.pdf" withExtension:nil];
     CGPDFDocumentRef pdf = CGPDFDocumentCreateWithURL((CFURLRef)pdfURL);
     self.pageCount = CGPDFDocumentGetNumberOfPages(pdf);
-    
-
 
     [self addIndexPopUpButton];
     

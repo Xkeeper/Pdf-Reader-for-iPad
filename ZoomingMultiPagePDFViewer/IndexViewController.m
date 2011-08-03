@@ -63,7 +63,7 @@
 
 - (CGSize)contentSizeForScrollView
 {
-    return CGSizeMake(768 * pageCount/4, 192);
+    return CGSizeMake(768 * pageCount / 4, 192);
 }
 
 - (void)viewDidUnload
@@ -75,10 +75,11 @@
 {
     CGRect visibleBounds = scrollView.bounds;//[self rectForView];
     int currentPage = (floorf(CGRectGetMinX(visibleBounds) / CGRectGetWidth(visibleBounds)));
+    currentPage *= 4;
     self.currentPageIndex = currentPage + 1;
     self.firstNeededPageIndex = MAX(currentPage - 4, 1);
     
-    self.lastNeededPageIndex = firstNeededPageIndex + 10;
+    self.lastNeededPageIndex = firstNeededPageIndex + 12;
     self.lastNeededPageIndex = MIN(lastNeededPageIndex, self.pageCount);    
 }
 
