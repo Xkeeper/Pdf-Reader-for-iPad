@@ -115,7 +115,6 @@
 		[self addSubview:backgroundImageView];
 		[self sendSubviewToBack:backgroundImageView];
         
-        
 		// Create the TiledPDFView based on the size of the PDF page and scale it to fit the view.
 		pdfView = [[TiledPDFView alloc] initWithFrame:pageRect andScale:pdfScale];
 		[pdfView setPage:page];

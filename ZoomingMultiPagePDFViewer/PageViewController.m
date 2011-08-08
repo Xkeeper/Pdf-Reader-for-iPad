@@ -55,10 +55,16 @@
     return CGSizeMake(768, 1004 * pageCount);
 }
 
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)theScrollView
+{
+    [super scrollViewDidEndDecelerating:theScrollView];
+    [self updateCurrentPageLabel];
+}
+
 - (void)calculateFirstLastNeededPageIndex
 {
-    CGRect visibleBounds = scrollView.bounds;//[self rectForView];
-    int currentPage = (floorf(CGRectGetMinX(visibleBounds) / CGRectGetWidth(visibleBounds)));
+    CGRect visibleBounds = scrollView.bounds;
+    int currentPage = (floorf(CGRectGetMinY(visibleBounds) / CGRectGetHeight(visibleBounds)));
     self.currentPageIndex = currentPage + 1;
     self.firstNeededPageIndex = MAX(currentPage--, 1);
     self.lastNeededPageIndex = firstNeededPageIndex + 3;
@@ -78,11 +84,6 @@
 {
     [super viewDidLoad];
     
-    // http://stackoverflow.com/questions/4732386/how-to-find-the-total-number-of-pages-in-pdf-file-loaded-in-objective-c
-    NSURL *pdfURL = [[NSBundle mainBundle] URLForResource:@"alice.pdf" withExtension:nil];
-    CGPDFDocumentRef pdf = CGPDFDocumentCreateWithURL((CFURLRef)pdfURL);
-    self.pageCount = CGPDFDocumentGetNumberOfPages(pdf);
-
     [self addIndexPopUpButton];
     
     [self addCurrentPageLabel];
@@ -112,9 +113,9 @@
 
 - (void)updateCurrentPageLabel
 {
-    [self.labelCurrentPage setText:[NSString  stringWithFormat:@"%d", self.currentPageIndex]];    
+    [self.labelCurrentPage setText:
+     [NSString  stringWithFormat:@"%d", self.currentPageIndex]];    
 }
-
 
 #pragma mark -
 - (void)showHideIndexPopup:(id)sender

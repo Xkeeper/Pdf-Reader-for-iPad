@@ -38,6 +38,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    // http://stackoverflow.com/questions/4732386/how-to-find-the-total-number-of-pages-in-pdf-file-loaded-in-objective-c
+    NSURL *pdfURL = [[NSBundle mainBundle] URLForResource:@"alice.pdf" withExtension:nil];
+    CGPDFDocumentRef pdf = CGPDFDocumentCreateWithURL((CFURLRef)pdfURL);
+    self.pageCount = CGPDFDocumentGetNumberOfPages(pdf);
+
+    
     [self addScrollView];
 }
 
