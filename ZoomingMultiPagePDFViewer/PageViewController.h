@@ -16,8 +16,10 @@
 {
     UILabel *labelCurrentPage;
     IndexViewController *indexViewController; 
+    BOOL handleNotification;
 }
 
+@property (nonatomic, assign) BOOL handleNotification;
 @property (nonatomic, retain) UILabel *labelCurrentPage;
 
 - (void)showHideIndexPopup:(id)sender;

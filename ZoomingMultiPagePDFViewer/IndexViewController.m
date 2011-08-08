@@ -10,6 +10,7 @@
 #import "PDFScrollView.h"
 
 @interface IndexViewController (Private)
+- (void)addGestureRecognizer;
 @end
 
 @implementation IndexViewController
@@ -42,7 +43,35 @@
     self.scrollView.frame = self.view.bounds;
     self.view.backgroundColor = [UIColor lightGrayColor];
         
+    [self addGestureRecognizer];
+    
     [self tilePages];
+}
+
+- (void)addGestureRecognizer
+{
+    UITapGestureRecognizer *tap =
+    [[UITapGestureRecognizer alloc] initWithTarget: self
+                                            action: @selector(changePage:)];
+    tap.numberOfTapsRequired = 1;
+    tap.numberOfTouchesRequired = 1;
+    [self.view addGestureRecognizer: tap];
+    [tap release];
+}
+
+- (void)changePage:(UITapGestureRecognizer *)recognizer
+{
+    CGPoint location = [recognizer locationInView:self.scrollView];
+    // NSLog(@"location tap x : %f, y : %f", location.x, location.y);
+    
+    NSLog(@"User Tapped page %f on index view controller.", ceilf(location.x/192));
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"CHANGE_CURRENT_PAGE" 
+                                                        object:nil 
+                                                      userInfo:[NSDictionary dictionaryWithObject:[NSNumber 
+                                                                                                   numberWithFloat:ceilf(location.x/192)] 
+                                                                                           forKey:@"PAGE"]];
+    
 }
 
 - (CGRect)rectForPage:(NSInteger)pageIndex
@@ -73,9 +102,10 @@
 
 - (void)calculateFirstLastNeededPageIndex
 {
-    CGRect visibleBounds = scrollView.bounds;//[self rectForView];
+    CGRect visibleBounds = scrollView.bounds;
     int currentPage = (floorf(CGRectGetMinX(visibleBounds) / CGRectGetWidth(visibleBounds)));
     currentPage *= 4;
+    
     self.currentPageIndex = currentPage + 1;
     self.firstNeededPageIndex = MAX(currentPage - 4, 1);
     

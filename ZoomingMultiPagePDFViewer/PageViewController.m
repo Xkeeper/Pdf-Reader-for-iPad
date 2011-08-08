@@ -16,14 +16,26 @@
     - (void)addCurrentPageLabel;
     - (void)updateCurrentPageLabel;
     - (void)addIndexPopUpButton;
+    - (void)scrollToPage:(int)pageIndex;
 @end
 
 @implementation PageViewController
 
 @synthesize labelCurrentPage;
+@synthesize handleNotification;
+
+- (void)changePage:(NSNotification *)notification
+{
+    self.currentPageIndex = [[notification.userInfo objectForKey:@"PAGE"] intValue];
+    self.handleNotification = YES;
+    
+    [self tilePages];
+}
 
 - (void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
     [labelCurrentPage release];
     
     [super dealloc];
@@ -63,12 +75,34 @@
 
 - (void)calculateFirstLastNeededPageIndex
 {
-    CGRect visibleBounds = scrollView.bounds;
-    int currentPage = (floorf(CGRectGetMinY(visibleBounds) / CGRectGetHeight(visibleBounds)));
-    self.currentPageIndex = currentPage + 1;
+    int currentPage;
+    
+    if (handleNotification)
+    {
+        currentPage = self.currentPageIndex;
+    }
+    else
+    {
+        CGRect visibleBounds = scrollView.bounds;
+        currentPage = (floorf(CGRectGetMinY(visibleBounds) / CGRectGetHeight(visibleBounds)));
+        self.currentPageIndex = currentPage + 1;
+    }
+
     self.firstNeededPageIndex = MAX(currentPage--, 1);
     self.lastNeededPageIndex = firstNeededPageIndex + 3;
     self.lastNeededPageIndex = MIN(lastNeededPageIndex, self.pageCount);    
+    
+    if (handleNotification)
+    {
+        [self scrollToPage:self.currentPageIndex];
+    }
+    
+    self.handleNotification = NO;
+}
+
+- (void)scrollToPage:(int)pageIndex
+{
+    [self.scrollView scrollRectToVisible:CGRectMake(0, (pageIndex-1)*1024, 768, 1024) animated:YES];
 }
 
 - (void)tilePages
@@ -79,10 +113,12 @@
 }
 
 #pragma mark - View lifecycle
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changePage:) name:@"CHANGE_CURRENT_PAGE" object:nil];
+    self.handleNotification = NO;  
     
     [self addIndexPopUpButton];
     
@@ -113,8 +149,7 @@
 
 - (void)updateCurrentPageLabel
 {
-    [self.labelCurrentPage setText:
-     [NSString  stringWithFormat:@"%d", self.currentPageIndex]];    
+    [self.labelCurrentPage setText:[NSString  stringWithFormat:@"%d", self.currentPageIndex]];    
 }
 
 #pragma mark -
